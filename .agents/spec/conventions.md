@@ -10,33 +10,16 @@ when_to_read: "Before making changes, running validation, committing, or opening
 
 ## Local validation
 
-Run commands from the repository root. This repository manages `pre-commit`
-through `mise.toml`. Use `mise exec --` so commands can find the configured tools
-even when the shell has not loaded mise activation.
+This repository has no `mise.toml`, `.pre-commit-config.yaml`, or CI
+workflows, so nothing validates changes automatically. Review changes by hand
+before committing:
 
-For a fresh clone, install mise first if needed, then initialize the tools and hooks:
+- Check that Markdown renders correctly, including links and tables.
+- Keep JSON keys sorted.
 
-```bash
-mise trust mise.toml
-mise install
-mise exec -- pre-commit install
-mise exec -- pre-commit install --hook-type commit-msg
-```
-
-Run hooks on the files you changed before committing:
-
-```bash
-mise exec -- pre-commit run --files path/to/file.yml path/to/another.md
-```
-
-Use `mise exec -- pre-commit run --all-files` when validation of the entire
-repository is needed. If hooks modify files, review the changes and rerun the
-hooks before staging them.
-
-In shells without mise activation, use `mise exec -- git commit` so installed
-Git hooks can also find `pre-commit`. If `pre-commit` is missing from the shell's
-PATH, try it through mise before concluding that it is unavailable or bypassing
-hooks.
+If a `pre-commit` Git hook is installed from another setup, it skips itself
+because there is no `.pre-commit-config.yaml`. When the hook cannot find
+`pre-commit` at all, run the commit as `mise exec pre-commit@latest -- git commit`.
 
 ## Git
 
@@ -61,7 +44,7 @@ Use Conventional Commits for every commit:
 
 ### Guidelines
 
-- Commit messages are checked by commitizen (local `commit-msg` hook) and commitlint (CI).
+- No hook or CI checks commit messages here, so follow this format by hand.
 - Commit body lines must not exceed 100 characters.
 - Do not amend or force-push commits that have already been published.
 - Do not add `Co-authored-by` trailers or authorship/attribution statements to
